@@ -122,7 +122,6 @@ export async function private_message_bob_stage_2(private_message_addr) {
   const ephemPubKeyEncoded = Buffer.from(ephemPubKey.encode());
   const pub_key_readable = Buffer.from(ephemPubKey.encode()).toString("hex");
 
-  window.db[pub_key_readable] = privateKey;
   window.localStorage.setItem(pub_key_readable, privateKey);
 
   var accounts = await w3.eth.getAccounts();
