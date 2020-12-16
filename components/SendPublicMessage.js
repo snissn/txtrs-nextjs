@@ -19,7 +19,7 @@ export default function SendPublicMessage() {
     if (message === "") {
       setErrorMessage("Your message cannot be empty");
     } else {
-      setSendStatus('Sending');
+      setSendStatus("Sending");
       contract.methods
         .send_public_message(message)
         .estimateGas()
@@ -28,17 +28,17 @@ export default function SendPublicMessage() {
             .send_public_message(message)
             .send({ gas: gasEstimate })
             .then(() => {
-                setSendStatus('');
-                setMessage('');
-            })
-        })
+              setSendStatus("");
+              setMessage("");
+            });
+        });
     }
   };
 
   return (
     <div className="panel-footer">
       <form onSubmit={mySubmitHandler}>
-        <div className="input-group">
+        <div className="input-group p-1">
           <input
             autocomplete="off"
             className="form-control input-sm"
@@ -47,14 +47,18 @@ export default function SendPublicMessage() {
             name="message"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
-            disabled={sendStatus === 'Sending'}
+            disabled={sendStatus === "Sending"}
           />
           <span className="input-group-btn">
             <input
-              className={sendStatus === 'Sending' ? 'btn btn-sm btn-danger' : 'btn btn-sm btn-warning'}
+              className={
+                sendStatus === "Sending"
+                  ? "btn btn-sm btn-danger"
+                  : "btn btn-sm btn-warning"
+              }
               style={{ fontSize: 19 }}
               type="submit"
-              value={sendStatus === 'Sending' ? 'Sharing...' : "Share"}
+              value={sendStatus === "Sending" ? "Sharing..." : "Share"}
             />
           </span>
           <br />

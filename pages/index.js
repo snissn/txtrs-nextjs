@@ -18,16 +18,14 @@ export default function Home() {
           <Identity />
         </div>
       </nav>
-      <div style={{ "max-width": "1500px", margin: "0 auto" }}>
-        <h1 className="App-title">
-          Secure OTR messaging (like Signal) using a secure ethereum sidechain.
-        </h1>
-        <p>
-          To demo the secure chat, send a public chat message and then click the
-          chat button to initiate a private message with yourself
-        </p>
-        <Txtrs />
-      </div>
+      <h1 className="App-title">
+        Secure OTR messaging (like Signal) using a secure ethereum sidechain.
+      </h1>
+      <p>
+        To demo the secure chat, send a public chat message and then click the
+        chat button to initiate a private message with yourself
+      </p>
+      <Txtrs />
     </div>
   );
 }

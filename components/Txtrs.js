@@ -28,33 +28,31 @@ export default function Txtrs() {
     return <p>Loading ...</p>;
   }
   return (
-    <div>
-      <div className="row">
-        {/* Public Chat Column */}
-        <div className="col">
-          <h2>Public Chat</h2>
-          <SendPublicMessage />
-          <PublicMessages />
-        </div>
+    <div className="row">
+      {/* Public Chat Column */}
+      <div className="col-4">
+        <h2>Public Chat</h2>
+        <SendPublicMessage />
+        <PublicMessages />
+      </div>
 
-        {/*
+      {/*
         <div className="col">
           <h2>Encrypted Conversations</h2>
           <Conversations />
         </div>
         */}
 
-        {/* Outgoing Messages Column */}
-        <div className="col">
-          <h2>Outgoing Secure Messages</h2>
-          <NewSendMessage />
-        </div>
+      {/* Outgoing Messages Column */}
+      <div className="col-4">
+        <h2>Outgoing Secure Messages</h2>
+        <NewSendMessage />
+      </div>
 
-        {/* Incoming Messages Column */}
-        <div className="col">
-          <h2>Incoming Secure Messages</h2>
-          <ReceivedMessages />
-        </div>
+      {/* Incoming Messages Column */}
+      <div className="col-4">
+        <h2>Incoming Secure Messages</h2>
+        <ReceivedMessages />
       </div>
     </div>
   );

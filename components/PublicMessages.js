@@ -106,31 +106,32 @@ export default class PublicMessages extends React.Component {
     return (
       <div className="container-fluid">
         {this.state.publicMessages.data.map((message, index) => (
-          <div className="container-fluid">
-            <Media>
-              <Media.Body>
-                <div className="media text-left text-muted pt-3">
-                  <img
-                    className="bd-placeholder-img mr-2 rounded-circle"
-                    width="45"
-                    height="45"
-                    src={blockies.createDataURL({ seed: message.sender })}
-                  />
-                  <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong className="d-block text-secondary">
-                      <EllipsisWithTooltip placement="bottom">
-                        @{message.sender}
-                      </EllipsisWithTooltip>
-                    </strong>
-                    {message.message}
-                  </p>
-                  <div class="col-sm-2">
-                    <StartConversationButton address={message.sender} />
-                  </div>
+          <Media>
+            <Media.Body>
+              <div className="media text-left text-muted pt-3">
+                <img
+                  className="bd-placeholder-img mr-2 rounded-circle"
+                  width="45"
+                  height="45"
+                  src={blockies.createDataURL({ seed: message.sender })}
+                />
+                <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                  <strong
+                    className="d-block text-secondary"
+                    style={{ width: 275 }}
+                  >
+                    <EllipsisWithTooltip placement="bottom">
+                      @{message.sender}
+                    </EllipsisWithTooltip>
+                  </strong>
+                  {message.message}
+                </p>
+                <div class="col-sm-2">
+                  <StartConversationButton address={message.sender} />
                 </div>
-              </Media.Body>
-            </Media>
-          </div>
+              </div>
+            </Media.Body>
+          </Media>
         ))}
       </div>
     );
