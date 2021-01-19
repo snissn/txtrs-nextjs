@@ -65,8 +65,11 @@ console.log("W3", w3);
 //  w3 = w3ws
 //}
 var contract_address = "0x6954fd4298F36FE38f254CF6789ebF755bb0035E";
-var contract_address = "0x6954fd4298F36FE38f254CF6789ebF755bb0035E";
+var contract_address = "0x3e1DB82db53256605224489C846298dAE0Cd83Be";
+
+
 export var users_address;
+
 
 export const contract = new w3.eth.Contract(abi, contract_address);
 export const contractws = new w3ws.eth.Contract(abi, contract_address);
