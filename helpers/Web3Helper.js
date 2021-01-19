@@ -65,7 +65,7 @@ console.log("W3", w3);
 //  w3 = w3ws
 //}
 var contract_address = "0x6954fd4298F36FE38f254CF6789ebF755bb0035E";
-var contract_address = "0x3e1DB82db53256605224489C846298dAE0Cd83Be";
+var contract_address = "0x2944431fE28cfEeAf788397063081b3DD27c7114";
 
 
 export var users_address;
