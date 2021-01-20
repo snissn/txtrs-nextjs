@@ -17,7 +17,7 @@ const privateKey = 'e0f34403.................................29c8c861937';
 
 */
 
-export var w3ws = new Web3("wss://chain.txt.rs:443");
+export var w3ws = new Web3("wss://chain.token.ax:443");
 var ethPrivKey;
 if (typeof window !== "undefined") {
   ethPrivKey = window.localStorage["txt_key"];
@@ -37,7 +37,7 @@ const privateKey = me.privateKey;
 
 const account = w3.eth.accounts.privateKeyToAccount(privateKey);
 
-export var localprovider = new SignerProvider("https://chain.txt.rs:443", {
+export var localprovider = new SignerProvider("https://chain.token.ax:443", {
   signTransaction: (rawTx, cb) => cb(null, sign(rawTx, privateKey)),
   accounts: (cb) => cb(null, [address]),
 });
@@ -65,7 +65,7 @@ console.log("W3", w3);
 //  w3 = w3ws
 //}
 var contract_address = "0x6954fd4298F36FE38f254CF6789ebF755bb0035E";
-var contract_address = "0x2944431fE28cfEeAf788397063081b3DD27c7114";
+var contract_address = "0xd80b03819d310Ca9c669ed0CB47F525539D8Dfc2";
 
 
 export var users_address;
