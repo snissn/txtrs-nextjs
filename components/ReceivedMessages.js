@@ -15,6 +15,7 @@ import {
 } from "../helpers/Web3Helper";
 import { colorHash, contrast } from "../helpers/Web3Helper";
 import SecretMessage from "./SecretMessage";
+import ReceivedMessage from "./ReceivedMessage";
 const blockies = require("ethereum-blockies-png");
 
 const EC = require("elliptic").ec;
@@ -46,7 +47,7 @@ export default class ReceivedMessages extends React.Component {
       {
         fromBlock: "latest",
       },
-      async function(err, data) {
+      async function (err, data) {
         console.log("event", data);
         await that.fetch();
       }
@@ -73,36 +74,8 @@ export default class ReceivedMessages extends React.Component {
         .encrypted_message()
         .call();
 
-      if (stage == "3") {
-        //decrypt using bob eey
-        const ec = new EC("secp256k1");
-        var pub_key_readable = Buffer.from(bob_public, "hex").toString("hex");
-        console.log("should be same kesy bob", bob_public, pub_key_readable);
-
-        if (typeof window == "undefined") {
-          return;
-        }
-
-        var ethPrivKey = window.localStorage[pub_key_readable];
-        if (ethPrivKey) {
-          //try to encrypt and then decrypt (?)
-          var pub = Buffer.from(pub_key_readable.slice(2), "hex");
-          var encrypt = ecies.encrypt(pub, "test");
-          var pk = ec.keyFromPrivate(ethPrivKey);
-          try {
-            plaintext = ecies
-              .decrypt(pk, Buffer.from(encrypted_message, "hex"))
-              .toString(); // XXX REAL ONE
-          } catch (e) {
-            console.log(e);
-          }
-
-          console.log("plaintext2", plaintext);
-        }
-      }
 
       var message = {
-        plaintext: plaintext,
         stage: stage,
         alice: alice,
         bob: bob,
@@ -112,9 +85,7 @@ export default class ReceivedMessages extends React.Component {
         bob_public: bob_public,
       };
 
-      if (stage == "1") {
-        private_message_bob_stage_2(private_message_addr);
-      }
+
       messages.push(message);
     }
     return messages;
@@ -124,44 +95,8 @@ export default class ReceivedMessages extends React.Component {
     return (
       <div>
         {this.state.receivedMessages.map((message) => (
-          <Card bsStyle="info" key={message.id} className="centeralign">
-            <Card.Header as="h3">
-              <div className="media text-left text-muted pt-3">
-                <img
-                  className="bd-placeholder-img mr-2 rounded-circle"
-                  width="45"
-                  height="45"
-                  src={blockies.createDataURL({ seed: message.alice })}
-                />
-                <p className="media-body  mb-0  lh-125 ">
-                  {(() => {
-                    switch (message.stage) {
-                      case "1":
-                        return (
-                          "Encrypted Message Request From " + message.alice
-                        );
-                      case "2":
-                        return (
-                          "Waiting On Encrypted Message from " + message.alice
-                        );
-                      case "3":
-                        return "Encrypted Message From " + message.alice;
-                      default:
-                        return message.alice;
-                    }
-                  })()}
-                </p>
-              </div>
-            </Card.Header>
-            <Card.Body
-              style={{
-                backgroundColor: colorHash.hex(message.alice),
-                color: contrast(colorHash.hex(message.alice)),
-              }}
-            >
-              <SecretMessage message={message} />
-            </Card.Body>
-          </Card>
+          <ReceivedMessage message={message} />
+
         ))}
       </div>
     );

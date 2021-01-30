@@ -2,7 +2,7 @@
  *Submitted for verification at Etherscan.io on 2019-12-22
 */
 
-pragma solidity ^0.4.14;
+pragma solidity ^0.4.26;
 pragma experimental ABIEncoderV2;
 
 
@@ -10,17 +10,21 @@ contract PublicMessage{
 
     string message;
     address sender;
+    uint timestamp;
 
     function PublicMessage(string _message, address _sender){
         message = _message;
         sender=_sender;
-        
+        timestamp = block.timestamp;
     }
     function get_message() returns (string){
         return message;
     }
     function get_message_sender() returns (address){
         return sender;
+    }
+    function get_message_timestamp() returns (uint){
+        return timestamp;
     }
 }
 
@@ -110,6 +114,8 @@ contract Txtrs {
         address[] all_sent_messages;
         address[] all_received_messages;
         address[] all_public_messages;
+        address[] private_messages;
+
         bool exists;
         
     }
@@ -146,11 +152,19 @@ contract Txtrs {
         if(!txtrs[alice].exists){
             create_txtr_on_receive(alice);
         }
-        txtrs[alice].all_sent_messages.push(message);
         if(!txtrs[bob].exists){
             create_txtr_on_receive(bob);
         }
+        txtrs[alice].all_sent_messages.push(message);
         txtrs[bob].all_received_messages.push(message);
+
+
+        //add to private messages array TODO is remove rec/sent arrays
+        txtrs[alice].private_messages.push(message);
+        if(alice!=bob){
+            txtrs[bob].private_messages.push(message);
+        }
+
         emit NewPrivateMessage(message, alice, bob);
         return message;
     }
@@ -210,8 +224,10 @@ contract Txtrs {
         address[] storage all_sent_messages;
         address[] storage all_received_messages;
         address[] storage all_public_messages;
+        address[] storage private_messages;
+
         txtrs_list.push(addr);
-        return Txtr({name:'', owner:addr, all_sent_messages: all_sent_messages,all_received_messages:all_received_messages,all_public_messages:all_public_messages,exists:true });
+        return Txtr({name:'', owner:addr, all_sent_messages: all_sent_messages,all_received_messages:all_received_messages,all_public_messages:all_public_messages,private_messages: private_messages,exists:true });
     }
 
 
@@ -219,14 +235,18 @@ contract Txtrs {
         address[] storage all_sent_messages;
         address[] storage all_received_messages;
         address[] storage all_public_messages;
+        address[] storage private_messages;
+
         txtrs_list.push(addr);
-        return Txtr({name:'', owner:addr, all_sent_messages: all_sent_messages,all_received_messages:all_received_messages,all_public_messages:all_public_messages,exists:true });
+        return Txtr({name:'', owner:addr, all_sent_messages: all_sent_messages,all_received_messages:all_received_messages,all_public_messages:all_public_messages,private_messages:private_messages,exists:true });
     }
     function    create_txtr(bytes32 username) {
        address[] storage all_sent_messages;
        address[] storage all_received_messages;
        address[] storage all_public_messages;
-       txtrs[msg.sender] = Txtr({name:username, owner:msg.sender, all_sent_messages: all_sent_messages,all_received_messages:all_received_messages,all_public_messages:all_public_messages,exists:true });
+       address[] storage private_messages;
+
+       txtrs[msg.sender] = Txtr({name:username, owner:msg.sender, all_sent_messages: all_sent_messages,all_received_messages:all_received_messages,all_public_messages:all_public_messages, private_messages:private_messages,exists:true });
        txtrs_list.push(msg.sender);
     }
 
@@ -265,7 +285,13 @@ contract Txtrs {
     }    
 
 
+    function get_private_messages_total(address addr) public returns (uint256) {
+        return txtrs[addr].private_messages.length;
+    }
     
+    function get_private_message(address addr, uint256 index) public returns (address) {
+        return address(txtrs[addr].private_messages[index]);
+    }        
     
     function get_one_message(uint256 index, address addr) public returns (string) {
         address _msg =  txtrs[addr].all_received_messages[index];
@@ -291,7 +317,6 @@ contract Txtrs {
         Message message = Message(_msg);
         return message.get_message();
     }
-
 }
 
 

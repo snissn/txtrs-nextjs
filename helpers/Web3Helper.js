@@ -65,7 +65,7 @@ console.log("W3", w3);
 //  w3 = w3ws
 //}
 var contract_address = "0x6954fd4298F36FE38f254CF6789ebF755bb0035E";
-var contract_address = "0xd80b03819d310Ca9c669ed0CB47F525539D8Dfc2";
+var contract_address = "0xBEd1F0BE378F63d6C15CB57626CC7FF4c109568C";
 
 
 export var users_address;
@@ -85,6 +85,39 @@ export function getPrivateMessage(addr) {
 }
 export function getBlockNumber(addr) {
   return new w3.eth.getBlockNumber();
+}
+export async function getPrivateMessages() {
+  var account = await w3.eth.getAccounts();
+  var messages_count = await contractws.methods
+    .get_private_messages_total(users_address)
+    .call();
+  var messages = [];
+  for (var index = messages_count - 1; index >= 0; index--) {
+    var private_message_addr = await contractws.methods
+      .get_private_message(users_address, index)
+      .call();
+
+
+      /* TODO make this much much easier to fetch data from blockchain */
+    var private_message = getPrivateMessageWS(private_message_addr);
+    var alice = await private_message.methods.alice().call();
+    var bob = await private_message.methods.bob().call();
+    var stage = await private_message.methods.stage().call();
+    var encrypted_message = await private_message.methods.encrypted_message().call();
+
+    var message = { stage: stage, alice: alice, bob: bob, id: index ,private_message_addr:private_message_addr, encrypted_message: encrypted_message};
+
+    if (stage == 1) {
+    }
+    if (stage == "2" || stage=="3") {
+      var bob_public = await private_message.methods.bob_public().call();
+      message["bob_public"] = bob_public;
+    }
+    message["address"] = private_message_addr;
+    message["id"] = index;
+    messages.push(message);
+  }
+  return messages;
 }
 
 export async function getSentMessages() {
@@ -177,7 +210,7 @@ export var colorHash = new ColorHash();
 export async function web3init() {
   if (!!window.ethereum) {
     // XXX if you want to re enable metamask run this next line:
-    //  await window.ethereum.enable(); //'https://rpc.goerli.mudit.blog/');
+      await window.ethereum.enable(); //'https://rpc.goerli.mudit.blog/');
   }
 
   var me = w3.eth.accounts.wallet.create(1)[0]["address"];

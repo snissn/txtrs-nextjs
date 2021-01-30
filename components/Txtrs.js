@@ -4,6 +4,9 @@ import SendPublicMessage from "../components/SendPublicMessage";
 import PublicMessages from "../components/PublicMessages";
 import ReceivedMessages from "../components/ReceivedMessages";
 import NewSendMessage from "../components/NewSendMessage";
+import Conversations from "../components/Conversations";
+
+
 
 import { web3init } from "../helpers/Web3Helper";
 
@@ -36,24 +39,12 @@ export default function Txtrs() {
         <PublicMessages />
       </div>
 
-      {/*
-        <div className="col">
+        <div className="col-4">
           <h2>Encrypted Conversations</h2>
           <Conversations />
         </div>
-        */}
 
-      {/* Outgoing Messages Column */}
-      <div className="col-4">
-        <h2>Outgoing Secure Messages</h2>
-        <NewSendMessage />
-      </div>
-
-      {/* Incoming Messages Column */}
-      <div className="col-4">
-        <h2>Incoming Secure Messages</h2>
-        <ReceivedMessages />
-      </div>
+ 
     </div>
   );
 }
