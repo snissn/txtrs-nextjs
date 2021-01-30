@@ -210,7 +210,7 @@ export var colorHash = new ColorHash();
 export async function web3init() {
   if (!!window.ethereum) {
     // XXX if you want to re enable metamask run this next line:
-      await window.ethereum.enable(); //'https://rpc.goerli.mudit.blog/');
+    //  await window.ethereum.enable(); //'https://rpc.goerli.mudit.blog/');
   }
 
   var me = w3.eth.accounts.wallet.create(1)[0]["address"];
