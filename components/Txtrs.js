@@ -34,7 +34,7 @@ export default function Txtrs() {
     <div className="row">
       {/* Public Chat Column */}
       <div className="col-4">
-        <h2>Public Chat</h2>
+        <h2>Introduce Yourself</h2>
         <SendPublicMessage />
         <PublicMessages />
       </div>
