@@ -35,11 +35,7 @@ export function getBlockNumber(addr) {
   return new w3.eth.getBlockNumber();
 }
 export async function getPrivateMessages() {
-  if (!users_address) {
-    users_address = '0x0C3DceF0029701def6D807071ce4dF1002F4718e';
-  }
   var account = await w3.eth.getAccounts();
-  console.log("UA", users_address)
   var messages_count = await contractws.methods
     .get_private_messages_total(users_address)
     .call();
