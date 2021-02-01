@@ -160,12 +160,11 @@ var ColorHash = require("color-hash");
 export var colorHash = new ColorHash();
 
 export async function web3init() {
-  // Metamask
-  if (!!window.ethereum) {
+  // XXX uncomment for metamask
+  //if (!!window.ethereum) {
+  if (false) {
     w3 = new Web3(window.ethereum)
-    console.log('b4')
     await window.ethereum.enable();
-    console.log('after')
   }
   // No Metamask - Check localStorage for address, otherwise create new
   else {
