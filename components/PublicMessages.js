@@ -6,7 +6,6 @@ import {
   getContract,
   contract,
   contractws,
-  web3init,
   getBlockNumber,
   colorHash,
   contrast,

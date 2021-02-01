@@ -12,58 +12,6 @@ const ec = new EC("secp256k1");
 
 export var w3 = new Web3();
 
-/*
-const privateKey = 'e0f34403.................................29c8c861937';
-
-*/
-
-export var w3ws = new Web3("wss://chain.token.ax:443");
-var ethPrivKey;
-if (typeof window !== "undefined") {
-  ethPrivKey = window.localStorage["txt_key"];
-}
-if (!ethPrivKey) {
-  var wallet = w3ws.eth.accounts.wallet.create(1)[0];
-  if (typeof window !== "undefined") {
-    window.localStorage.setItem("txt_key", wallet.privateKey);
-  }
-  ethPrivKey = wallet.privateKey;
-}
-var me = w3ws.eth.accounts.privateKeyToAccount(ethPrivKey);
-
-console.log("ME", me);
-const address = me.address;
-const privateKey = me.privateKey;
-
-const account = w3.eth.accounts.privateKeyToAccount(privateKey);
-
-export var localprovider = new SignerProvider("https://chain.token.ax:443", {
-  signTransaction: (rawTx, cb) => cb(null, sign(rawTx, privateKey)),
-  accounts: (cb) => cb(null, [address]),
-});
-w3.setProvider(localprovider);
-
-w3.eth.accounts.wallet.add(account);
-w3.eth.defaultAccount = account.address;
-
-w3.eth.getAccounts().then(function(a) {
-  console.log("AOKNOW", a);
-});
-/*
-export var localprovider = new SignerProvider('wss://chain.txt.rs:443', {
-  signTransaction: (rawTx, cb) => cb(null, sign(rawTx, '0x...privateKey...')),
-  accounts: (cb) => cb(null, ['0x407d73d8a49eeb85d32cf465507dd71d507100c1']),
-});
-export var w3 = new Web3(localprovider);
-
-*/
-
-console.log("W3", w3);
-
-//export var w3ws = w3;// new Web3("wss://chain.txt.rs:443");
-//if (!!!window.ethereum) {
-//  w3 = w3ws
-//}
 var contract_address = "0x6954fd4298F36FE38f254CF6789ebF755bb0035E";
 var contract_address = "0xBEd1F0BE378F63d6C15CB57626CC7FF4c109568C";
 
@@ -71,14 +19,14 @@ var contract_address = "0xBEd1F0BE378F63d6C15CB57626CC7FF4c109568C";
 export var users_address;
 
 
-export const contract = new w3.eth.Contract(abi, contract_address);
-export const contractws = new w3ws.eth.Contract(abi, contract_address);
+export var contract;
+export var contractws;
 
 export function getContract() {
   return contract;
 }
 export function getPrivateMessageWS(addr) {
-  return new w3ws.eth.Contract(abi_private_message, addr);
+  return new w3.eth.Contract(abi_private_message, addr);
 }
 export function getPrivateMessage(addr) {
   return new w3.eth.Contract(abi_private_message, addr);
@@ -87,7 +35,11 @@ export function getBlockNumber(addr) {
   return new w3.eth.getBlockNumber();
 }
 export async function getPrivateMessages() {
+  if (!users_address) {
+    users_address = '0x0C3DceF0029701def6D807071ce4dF1002F4718e';
+  }
   var account = await w3.eth.getAccounts();
+  console.log("UA", users_address)
   var messages_count = await contractws.methods
     .get_private_messages_total(users_address)
     .call();
@@ -208,19 +160,45 @@ var ColorHash = require("color-hash");
 export var colorHash = new ColorHash();
 
 export async function web3init() {
+  // Metamask
   if (!!window.ethereum) {
-    // XXX if you want to re enable metamask run this next line:
-    //  await window.ethereum.enable(); //'https://rpc.goerli.mudit.blog/');
+    w3 = new Web3(window.ethereum)
+    console.log('b4')
+    await window.ethereum.enable();
+    console.log('after')
   }
+  // No Metamask - Check localStorage for address, otherwise create new
+  else {
+    var ethPrivKey;
+    if (typeof window !== "undefined") {
+      ethPrivKey = window.localStorage["txt_key"];
+    }
+    if (!ethPrivKey) {
+      var wallet = w3.eth.accounts.wallet.create(1)[0];
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("txt_key", wallet.privateKey);
+      }
+      ethPrivKey = wallet.privateKey;
+    }
+    var me = w3.eth.accounts.privateKeyToAccount(ethPrivKey);
 
-  var me = w3.eth.accounts.wallet.create(1)[0]["address"];
-  console.log("default account", w3.eth.defaultAccount);
-  console.log("me account", me);
-  w3.eth.defaultAccount = me;
-  console.log("default account", w3.eth.defaultAccount);
-  var account = await w3.eth.getAccounts();
-  console.log(account[0]);
-  contract.options.from = account[0];
-  users_address = account[0];
+    console.log("ME", me);
+    const address = me.address;
+    const privateKey = me.privateKey;
+    const account = w3.eth.accounts.privateKeyToAccount(privateKey);
+    // Use local web3 provider
+    w3 = new Web3("wss://chain.token.ax:443") 
+
+    w3.eth.accounts.wallet.add(account);
+    w3.eth.defaultAccount = account.address;
+
+  }
+  var accounts = await w3.eth.getAccounts();
+  console.log("ACC", accounts)
+  users_address = accounts[0]
+  console.log(users_address);
+  contract = new w3.eth.Contract(abi, contract_address);
+  contract.options.from = users_address;
+  contractws = contract
   return true;
 }

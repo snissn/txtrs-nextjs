@@ -5,8 +5,7 @@ import PublicMessages from "../components/PublicMessages";
 import ReceivedMessages from "../components/ReceivedMessages";
 import NewSendMessage from "../components/NewSendMessage";
 import Conversations from "../components/Conversations";
-
-
+import Identity from "../components/Identity";
 
 import { web3init } from "../helpers/Web3Helper";
 
@@ -31,6 +30,12 @@ export default function Txtrs() {
     return <p>Loading ...</p>;
   }
   return (
+    <div>
+    <div className="row">
+      <div className="col-4 offset-4">
+      <Identity />
+      </div>
+    </div>
     <div className="row">
       {/* Public Chat Column */}
       <div className="col-4">
@@ -45,6 +50,7 @@ export default function Txtrs() {
         </div>
 
  
+    </div>
     </div>
   );
 }
