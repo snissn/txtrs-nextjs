@@ -25,7 +25,7 @@ export default function Txtrs() {
     web3init(provider).then((result) => {
       setInit(true);
       setProvider(provider)
-    });
+    }).catch((error) => {alert(error); if (provider =="meta") setAccount("local")});
 
 
   };

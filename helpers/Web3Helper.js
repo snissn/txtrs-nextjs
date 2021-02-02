@@ -162,7 +162,7 @@ export async function web3init(provider) {
         await window.ethereum.enable();
       }
       else {
-          return false
+          throw new Error("MetaMask Not Available");
       }
   }
   else if (provider == 'local') {
