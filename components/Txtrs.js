@@ -14,12 +14,21 @@ export default function Txtrs() {
   // This is not used atm why are we setting it?
   const [networkName, setNetworkName] = useState("private");
   const [init, setInit] = useState(false);
+  const [provider, setProvider] = useState("local");
 
   useEffect(() => {
-    web3init().then((result) => {
-      setInit(true);
-    });
+    setAccount("local");
   }, []);
+
+  const setAccount = (provider) => {
+    setInit(false);
+    web3init(provider).then((result) => {
+      setInit(true);
+      setProvider(provider)
+    });
+
+
+  };
 
   // This is not used atm
   const getPublicMessages = async () => {
@@ -33,10 +42,8 @@ export default function Txtrs() {
   return (
     <div>
     <div className="row">
-      <div className="col-1">
-      <Account />
-      </div>
-      <div className="col-4 offset-3">
+      <div className="col-4 offset-4">
+      <Account setAccount={setAccount} provider={provider}/>
       <Identity />
       </div>
     </div>
