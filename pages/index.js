@@ -1,6 +1,5 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import Identity from "../components/Identity";
 import Txtrs from "../components/Txtrs";
 
 export default function Home() {
@@ -14,9 +13,6 @@ export default function Home() {
         <a className="navbar-brand" href="#">
           Txt.rs
         </a>
-        <div className="y-2 my-lg-0">
-          <Identity />
-        </div>
       </nav>
       <h1 className="App-title">
         Secure OTR messaging (like Signal) using a secure ethereum sidechain.
