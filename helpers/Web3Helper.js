@@ -155,10 +155,9 @@ export function contrast(colorHex, threshold) {
 var ColorHash = require("color-hash");
 export var colorHash = new ColorHash();
 
-export async function web3init() {
+export async function web3init(provider) {
   // XXX uncomment for metamask
-  //if (!!window.ethereum) {
-  if (false) {
+  if (!!window.ethereum && provider !== 'local') {
     w3 = new Web3(window.ethereum)
     await window.ethereum.enable();
   }

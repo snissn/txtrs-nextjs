@@ -6,6 +6,7 @@ import ReceivedMessages from "../components/ReceivedMessages";
 import NewSendMessage from "../components/NewSendMessage";
 import Conversations from "../components/Conversations";
 import Identity from "../components/Identity";
+import Account from "../components/Account";
 
 import { web3init } from "../helpers/Web3Helper";
 
@@ -32,7 +33,10 @@ export default function Txtrs() {
   return (
     <div>
     <div className="row">
-      <div className="col-4 offset-4">
+      <div className="col-1">
+      <Account />
+      </div>
+      <div className="col-4 offset-3">
       <Identity />
       </div>
     </div>
