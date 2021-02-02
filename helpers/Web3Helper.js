@@ -156,6 +156,9 @@ var ColorHash = require("color-hash");
 export var colorHash = new ColorHash();
 
 export async function web3init(provider) {
+  // Always use local for WS events 
+  const w3ws = new Web3("wss://chain.token.ax:443") 
+  contractws = new w3ws.eth.Contract(abi, contract_address);
   if (provider == 'meta') {
       if (!!window.ethereum) {
         w3 = new Web3(window.ethereum)
@@ -177,14 +180,18 @@ export async function web3init(provider) {
       }
       ethPrivKey = wallet.privateKey;
     }
+    // Use local web3 provider
     var me = w3.eth.accounts.privateKeyToAccount(ethPrivKey);
+    var localprovider = new SignerProvider("https://chain.token.ax:443", {
+          signTransaction: (rawTx, cb) => cb(null, sign(rawTx, privateKey)),
+          accounts: (cb) => cb(null, [address]),
+    });
+    w3.setProvider(localprovider);
 
     console.log("ME", me);
     const address = me.address;
     const privateKey = me.privateKey;
     const account = w3.eth.accounts.privateKeyToAccount(privateKey);
-    // Use local web3 provider
-    w3 = new Web3("wss://chain.token.ax:443") 
 
     w3.eth.accounts.wallet.add(account);
     w3.eth.defaultAccount = account.address;
@@ -196,6 +203,5 @@ export async function web3init(provider) {
   console.log(users_address);
   contract = new w3.eth.Contract(abi, contract_address);
   contract.options.from = users_address;
-  contractws = contract
   return true;
 }
